@@ -6,6 +6,7 @@ import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 WINERY_FOUNDATION_YEAR = 1920
+WINES_TABLE_FILE = 'wine.xlsx'
 
 
 def get_wine_by_categories(database):
@@ -25,13 +26,11 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
-database = 'wine.xlsx'
-
 template = env.get_template('template.html')
 
 render_page = template.render(
     wine_factory_age=dt.datetime.now().year - WINERY_FOUNDATION_YEAR,
-    wines_by_category=get_wine_by_categories(database),
+    wines_by_category=get_wine_by_categories(WINES_TABLE_FILE),
 )
 
 with open('index.html', 'w', encoding='utf8') as file:
