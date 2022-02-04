@@ -21,20 +21,29 @@ def get_wine_by_categories(database):
     return wine_by_categories
 
 
-env = Environment(
-    loader=FileSystemLoader('.'),
-    autoescape=select_autoescape(['html', 'xml'])
-)
+def render_webpage(wines_by_category):
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
 
-template = env.get_template('template.html')
+    template = env.get_template('template.html')
 
-render_page = template.render(
-    wine_factory_age=dt.datetime.now().year - WINERY_FOUNDATION_YEAR,
-    wines_by_category=get_wine_by_categories(WINES_TABLE_FILE),
-)
+    render_page = template.render(
+        wine_factory_age=dt.datetime.now().year - WINERY_FOUNDATION_YEAR,
+        wines_by_category=wines_by_category,
+    )
 
-with open('index.html', 'w', encoding='utf8') as file:
-    file.write(render_page)
+    with open('index.html', 'w', encoding='utf8') as file:
+        file.write(render_page)
 
-server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+
+def main():
+    wines_by_category = get_wine_by_categories(WINES_TABLE_FILE)
+    render_webpage(wines_by_category)
+    server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+
+if __name__ == '__main__':
+    main()
