@@ -5,10 +5,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-
-def get_age():
-    age = dt.datetime.now().year - 1920
-    return age
+WINERY_FOUNDATION_YEAR = 1920
 
 
 def get_wine_by_categories(database):
@@ -33,7 +30,7 @@ database = 'wine.xlsx'
 template = env.get_template('template.html')
 
 render_page = template.render(
-    wine_factory_age=get_age(),
+    wine_factory_age=dt.datetime.now().year - WINERY_FOUNDATION_YEAR,
     wines_by_category=get_wine_by_categories(database),
 )
 
